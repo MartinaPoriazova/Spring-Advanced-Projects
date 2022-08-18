@@ -16,7 +16,6 @@ public class BooksApplicationInit implements CommandLineRunner {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
 
-
     BooksApplicationInit(AuthorRepository authorRepository,
                          BookRepository bookRepository) {
 

@@ -1,5 +1,4 @@
 let loadBooksBtn = document.getElementById('loadBooks')
-
 loadBooksBtn.addEventListener('click', onLoadBooks);
 
 function onLoadBooks(event) {
@@ -14,6 +13,7 @@ function onLoadBooks(event) {
     fetch("http://localhost:8080/api/books/", requestOptions)
         .then(response => response.json())
         .then(json => json.forEach(book => {
+
             // here we will create some elements and add them to the table.
             let row = document.createElement('tr')
 

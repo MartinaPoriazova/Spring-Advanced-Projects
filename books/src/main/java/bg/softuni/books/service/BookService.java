@@ -4,6 +4,7 @@ import bg.softuni.books.model.dto.AuthorDTO;
 import bg.softuni.books.model.dto.BookDTO;
 import bg.softuni.books.model.entity.BookEntity;
 import bg.softuni.books.repository.BookRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,4 +40,14 @@ public class BookService {
                 .setIsbn(bookEntity.getIsbn())
                 .setAuthor(new AuthorDTO().setName(bookEntity.getAuthor().getName()));
     }
+
+    public void deleteBookById(Long bookId) {
+        try {
+            this.bookRepository.deleteById(bookId);
+        } catch (EmptyResultDataAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

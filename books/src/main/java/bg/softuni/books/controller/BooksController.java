@@ -4,6 +4,7 @@ import bg.softuni.books.model.dto.BookDTO;
 import bg.softuni.books.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,18 @@ public class BooksController {
         } else {
             return ResponseEntity.ok(bookOpt.get());
         }
+    }
+
+    @PostMapping
+    public ResponseEntity<BookDTO> createBook(@RequestBody BookDTO newBook,
+                                              UriComponentsBuilder uriComponentsBuilder) {
+        long newBookID = bookService.createBook(newBook);
+
+        return
+                ResponseEntity.
+                        created(uriComponentsBuilder.path("/api/books/{id}").
+                                build(newBookID)).
+                        build();
     }
 
     @DeleteMapping("/{id}")

@@ -7,6 +7,7 @@ import bg.softuni.hateoas.model.entity.StudentEntity;
 import bg.softuni.hateoas.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -43,5 +44,13 @@ public class StudentService {
                 .setId(orderEntity.getId())
                 .setStudentId(orderEntity.getStudent().getId())
                 .setCourseId(orderEntity.getCourse().getId());
+    }
+
+    public List<StudentDTO> getAllStudents() {
+        return studentRepository
+                .findAll()
+                .stream()
+                .map(this::map)
+                .toList();
     }
 }

@@ -24,9 +24,24 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @GetMapping
+    public ResponseEntity<CollectionModel<EntityModel<StudentDTO>>> getStudents() {
+
+        List<EntityModel<StudentDTO>> studentEntityModels = studentService
+                .getAllStudents()
+                .stream()
+                .map(s -> EntityModel.of(s, getStudentsLinks(s)))
+                .toList();
+
+        return ResponseEntity.
+                ok(CollectionModel.of(studentEntityModels));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<StudentDTO>> getStudentById(@PathVariable("id") Long id) {
+
         var studentOpt = studentService.getStudentById(id);
+
         if (studentOpt.isEmpty()) {
             return ResponseEntity
                     .notFound()

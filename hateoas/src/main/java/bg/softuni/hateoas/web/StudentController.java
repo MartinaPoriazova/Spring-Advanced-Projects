@@ -30,7 +30,7 @@ public class StudentController {
         List<EntityModel<StudentDTO>> studentEntityModels = studentService
                 .getAllStudents()
                 .stream()
-                .map(s -> EntityModel.of(s, getStudentsLinks(s)))
+                .map(s -> EntityModel.of(s, getStudentLinks(s)))
                 .toList();
 
         return ResponseEntity.
@@ -50,13 +50,20 @@ public class StudentController {
 
         var student = studentOpt.get();
 
-        return ResponseEntity.ok(EntityModel.of(student, getStudentsLinks(student)));
+        return ResponseEntity.ok(EntityModel.of(student, getStudentLinks(student)));
     }
+
 
     @GetMapping("/{id}/orders")
     public ResponseEntity<CollectionModel<EntityModel<OrderDTO>>> getStudentOrders(@PathVariable("id") Long id) {
-        //TODO
-        throw new UnsupportedOperationException("Coming soon!");
+
+        var orders = studentService
+                .getStudentOrders(id)
+                .stream()
+                .map(o -> EntityModel.of(o, getOrderLinks(o)))
+                .toList();
+
+        return ResponseEntity.ok(CollectionModel.of(orders));
     }
 
     @PutMapping("/{id}")
@@ -67,14 +74,27 @@ public class StudentController {
         throw new UnsupportedOperationException("Not important right now!");
     }
 
-    private Link[] getStudentsLinks(StudentDTO studentDTO) {
+    private Link[] getStudentLinks(StudentDTO studentDTO) {
         List<Link> studentLinks = new ArrayList<>();
 
-        Link selfRel =
-                linkTo(methodOn(StudentController.class).getStudentById(studentDTO.getId())).withSelfRel();
+        Link selfRel = linkTo(methodOn(StudentController.class).getStudentById(studentDTO.getId())).withSelfRel();
 
         studentLinks.add(selfRel);
 
-        return studentLinks.toArray(studentLinks.toArray(new Link[studentLinks.size()]));
+        if (!studentDTO.isDeleted()) {
+            Link orderLink = linkTo(methodOn(StudentController.class).getStudentOrders(studentDTO.getId())).withRel("orders");
+
+            studentLinks.add(orderLink);
+
+            Link updateLink = linkTo(methodOn(StudentController.class).updateStudent(studentDTO.getId(), studentDTO)).withRel("update");
+
+            studentLinks.add(updateLink);
+        }
+
+        return studentLinks.toArray(studentLinks.toArray(new Link[0]));
+    }
+
+    private Link getOrderLinks(OrderDTO orderDTO) {
+        return linkTo(methodOn(StudentController.class).getStudentById(orderDTO.getStudentId())).withRel("student");
     }
 }

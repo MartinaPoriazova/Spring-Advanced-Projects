@@ -1,6 +1,6 @@
-insert into students (id, age, is_deleted, name) values (1, "21", 0, "Pesho");
-insert into students (id, age, is_deleted, name) values (2, "22", 0, "Gosho");
-insert into students (id, age, is_deleted, name) values (3, "20", 1, "Anna");
+insert into students (id, age, is_deleted, name) values (1, 21, 0, "Pesho");
+insert into students (id, age, is_deleted, name) values (2, 22, 0, "Gosho");
+insert into students (id, age, is_deleted, name) values (3, 20, 1, "Anna");
 
 insert into courses (id, name, price) values (1, "Spring", 100);
 insert into courses (id, name, price) values (2, "JS", 50);

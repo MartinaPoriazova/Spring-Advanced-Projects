@@ -1,6 +1,7 @@
 package bg.softuni.errors.web;
 
 import bg.softuni.errors.model.ProductDTO;
+import bg.softuni.errors.model.ProductNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,10 @@ public class ProductController {
     public String getProductById(@PathVariable("id") Long id,
                                  Model model) {
         ProductDTO productDTO = getProductDTOById(id);
+
+        if (productDTO == null) {
+            throw new ProductNotFoundException(id);
+        }
 
         model.addAttribute("name", productDTO.getName());
 

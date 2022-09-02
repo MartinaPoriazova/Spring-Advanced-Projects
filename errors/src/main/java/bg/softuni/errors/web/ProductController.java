@@ -2,11 +2,11 @@ package bg.softuni.errors.web;
 
 import bg.softuni.errors.model.ProductDTO;
 import bg.softuni.errors.model.ProductNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @RequestMapping("/product")
 @Controller
@@ -24,6 +24,15 @@ public class ProductController {
         model.addAttribute("name", productDTO.getName());
 
         return "product";
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler({ProductNotFoundException.class})
+    public ModelAndView onProductNotFound(ProductNotFoundException pnfe) {
+        ModelAndView modelAndView = new ModelAndView("product-not-found");
+        modelAndView.addObject("productId", pnfe.getId());
+
+        return modelAndView;
     }
 
     private ProductDTO getProductDTOById(Long id) {

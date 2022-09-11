@@ -1,5 +1,6 @@
 package bg.softuni.errors.web;
 
+import bg.softuni.errors.model.ObjectNotFountException;
 import bg.softuni.errors.model.ProductDTO;
 import bg.softuni.errors.model.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,14 @@ public class ProductController {
                                  Model model) {
         ProductDTO productDTO = getProductDTOById(id);
 
+
+    // uncomment for controller based exception handling
+//        if (productDTO == null) {
+//            throw new ProductNotFoundException(id);
+//        }
+
         if (productDTO == null) {
-            throw new ProductNotFoundException(id);
+            throw new ObjectNotFountException(id);
         }
 
         model.addAttribute("name", productDTO.getName());
@@ -26,14 +33,15 @@ public class ProductController {
         return "product";
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    @ExceptionHandler({ProductNotFoundException.class})
-    public ModelAndView onProductNotFound(ProductNotFoundException pnfe) {
-        ModelAndView modelAndView = new ModelAndView("product-not-found");
-        modelAndView.addObject("productId", pnfe.getId());
-
-        return modelAndView;
-    }
+    // uncomment for controller based exception handling
+//    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+//    @ExceptionHandler({ProductNotFoundException.class})
+//    public ModelAndView onProductNotFound(ProductNotFoundException pnfe) {
+//        ModelAndView modelAndView = new ModelAndView("product-not-found");
+//        modelAndView.addObject("productId", pnfe.getId());
+//
+//        return modelAndView;
+//    }
 
     private ProductDTO getProductDTOById(Long id) {
         return null;
